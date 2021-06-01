@@ -7,9 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 public class LoginResponseData {
 
+    private Long id;
     private String accessToken;
     private String refreshToken;
-    private String userId;
     private String nickname;
     private String profileUrl;
 

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class AuthServiceTest {
+class AuthenticationServiceTest {
 
     private static final Long USER_ID = 1004L;
     private static final String NICKNAME = "james";
@@ -26,7 +26,7 @@ class AuthServiceTest {
     private static final String EMAIL = "james123@gmail.com";
     private static final String PROFILE_URL = "https://cdn.kakao.com/images/james";
 
-    private AuthService authService;
+    private AuthenticationService authenticationService;
 
     private final UserRepository userRepository = mock(UserRepository.class);
 
@@ -35,7 +35,7 @@ class AuthServiceTest {
         ModelMapper modelMapper = new ModelMapper();
 
         JwtUtil jwtUtil = new JwtUtil(SECRET);
-        authService = new AuthService(modelMapper, userRepository, jwtUtil);
+        authenticationService = new AuthenticationService(modelMapper, userRepository, jwtUtil);
 
         User user = User.builder()
                 .id(USER_ID)
@@ -53,7 +53,7 @@ class AuthServiceTest {
     @Test
     @DisplayName("login 테스트")
     void login_valid() {
-        LoginResponseData loginResponseData = authService.login(VALID_UUID);
+        LoginResponseData loginResponseData = authenticationService.login(VALID_UUID);
 
         assertEquals(loginResponseData.getNickname(), NICKNAME);
         assertNotEquals(loginResponseData.getAccessToken(), "");
@@ -64,9 +64,8 @@ class AuthServiceTest {
     void login_invalid_uuid() {
         UserNotFoundException exception = assertThrows(
                 UserNotFoundException.class,
-                () -> authService.login(INVALID_UUID)
+                () -> authenticationService.login(INVALID_UUID)
         );
-
-        assertNotNull(exception);
+        assertNotNull(exception.getMessage());
     }
 }

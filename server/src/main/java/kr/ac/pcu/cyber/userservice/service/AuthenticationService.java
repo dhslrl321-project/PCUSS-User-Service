@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class AuthService {
+public class AuthenticationService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public AuthService(ModelMapper modelMapper, UserRepository userRepository, JwtUtil jwtUtil) {
+    public AuthenticationService(ModelMapper modelMapper, UserRepository userRepository, JwtUtil jwtUtil) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
