@@ -5,9 +5,10 @@ import lombok.*;
 @Getter @Setter @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponseData {
+public class AuthResponseData {
 
     private Long id;
+    private String userId;
     private String accessToken;
     private String refreshToken;
     private String nickname;

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setterw
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorResponse {

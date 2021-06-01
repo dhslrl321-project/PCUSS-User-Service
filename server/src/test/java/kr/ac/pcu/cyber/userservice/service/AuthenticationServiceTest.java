@@ -1,6 +1,7 @@
 package kr.ac.pcu.cyber.userservice.service;
 
-import kr.ac.pcu.cyber.userservice.domain.dto.LoginResponseData;
+import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
+import kr.ac.pcu.cyber.userservice.domain.dto.RegisterData;
 import kr.ac.pcu.cyber.userservice.domain.entity.User;
 import kr.ac.pcu.cyber.userservice.domain.repository.UserRepository;
 import kr.ac.pcu.cyber.userservice.errors.UserNotFoundException;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -42,30 +44,48 @@ class AuthenticationServiceTest {
                 .nickname(NICKNAME)
                 .email(EMAIL)
                 .profileUrl(PROFILE_URL)
-                .UUID(VALID_UUID)
+                .userId(VALID_UUID)
                 .build();
 
-        given(userRepository.findByUUID(VALID_UUID)).willReturn(Optional.of(user));
-        given(userRepository.findByUUID(INVALID_UUID)).willReturn(Optional.empty());
+        given(userRepository.findByUserId(VALID_UUID)).willReturn(Optional.of(user));
+        given(userRepository.findByUserId(INVALID_UUID)).willReturn(Optional.empty());
+
+        given(userRepository.save(any(User.class))).willReturn(user);
 
     }
 
     @Test
-    @DisplayName("login 테스트")
+    @DisplayName("login 성공")
     void login_valid() {
-        LoginResponseData loginResponseData = authenticationService.login(VALID_UUID);
+        AuthResponseData responseData = authenticationService.login(VALID_UUID);
 
-        assertEquals(loginResponseData.getNickname(), NICKNAME);
-        assertNotEquals(loginResponseData.getAccessToken(), "");
+        assertEquals(responseData.getNickname(), NICKNAME);
+        assertNotEquals(responseData.getAccessToken(), "");
     }
 
     @Test
-    @DisplayName("login 존재하지 않는 uuid")
+    @DisplayName("login 실패 - 존재하지 않는 uuid")
     void login_invalid_uuid() {
         UserNotFoundException exception = assertThrows(
                 UserNotFoundException.class,
                 () -> authenticationService.login(INVALID_UUID)
         );
         assertNotNull(exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("register 성공")
+    void register_valid() {
+        RegisterData registerData = RegisterData.builder()
+                .email(EMAIL)
+                .nickname(NICKNAME)
+                .profileUrl(PROFILE_URL)
+                .build();
+
+        AuthResponseData responseData = authenticationService.register(registerData);
+
+        assertNotNull(responseData.getId());
+        assertEquals(responseData.getNickname(), NICKNAME);
+        assertNotEquals(responseData.getAccessToken(), "");
     }
 }

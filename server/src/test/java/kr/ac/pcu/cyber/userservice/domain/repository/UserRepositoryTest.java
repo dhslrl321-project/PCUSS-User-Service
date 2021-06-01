@@ -27,7 +27,7 @@ class UserRepositoryTest {
         User user = User.builder()
                 .email("test123@gmail.com")
                 .nickname(nickname)
-                .UUID(UUID.randomUUID().toString())
+                .userId(UUID.randomUUID().toString())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -36,8 +36,8 @@ class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("UUID 로 회원 조회")
-    void findUserByUUID() {
+    @DisplayName("userId 로 회원 조회")
+    void findUserByUserId() {
         // given
         String nickname = "james";
         String uuid = UUID.randomUUID().toString();
@@ -45,13 +45,13 @@ class UserRepositoryTest {
         User user = User.builder()
                 .email("test123@gmail.com")
                 .nickname(nickname)
-                .UUID(uuid)
+                .userId(uuid)
                 .build();
 
         userRepository.save(user);
 
         // when
-        Optional<User> optionalUser = userRepository.findByUUID(uuid);
+        Optional<User> optionalUser = userRepository.findByUserId(uuid);
 
         // then
         User selectedUser = optionalUser.get();

@@ -5,7 +5,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import kr.ac.pcu.cyber.userservice.errors.EmptyTokenException;
 import kr.ac.pcu.cyber.userservice.errors.InvalidTokenException;
 import kr.ac.pcu.cyber.userservice.errors.TokenExpiredException;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,15 +56,10 @@ public class JwtUtil {
      *
      * @param token access, refresh token
      * @return 사용자 정보가 담긴 문자열
-     * @throws EmptyTokenException 토큰이 비어있을 때
      * @throws TokenExpiredException 토큰이 만료되었을 때
      * @throws InvalidTokenException 토큰이 유효하지 않을 때
      */
     public Claims parseToken(String token) {
-        if(token == null || token.isBlank() || token.isEmpty()) { // 아마 gateway 에서 걸러질듯
-            throw new EmptyTokenException(token);
-        }
-
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)

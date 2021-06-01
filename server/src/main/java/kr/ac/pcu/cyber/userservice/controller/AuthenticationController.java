@@ -1,12 +1,11 @@
 package kr.ac.pcu.cyber.userservice.controller;
 
-import kr.ac.pcu.cyber.userservice.domain.dto.LoginResponseData;
+import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
+import kr.ac.pcu.cyber.userservice.domain.dto.RegisterData;
 import kr.ac.pcu.cyber.userservice.service.AuthenticationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/auth", produces = "application/json; charset=utf-8")
@@ -19,7 +18,12 @@ public class AuthenticationController {
     }
 
     @GetMapping("/login/{uuid}")
-    public ResponseEntity login(@PathVariable String uuid) {
+    public ResponseEntity<AuthResponseData> login(@PathVariable String uuid) {
         return ResponseEntity.ok(authenticationService.login(uuid));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponseData> register(@RequestBody RegisterData registerData) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(registerData));
     }
 }
