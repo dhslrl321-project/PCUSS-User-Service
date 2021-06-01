@@ -4,6 +4,8 @@ import kr.ac.pcu.cyber.userservice.domain.dto.LoginResponseData;
 import kr.ac.pcu.cyber.userservice.domain.entity.User;
 import kr.ac.pcu.cyber.userservice.domain.repository.UserRepository;
 import kr.ac.pcu.cyber.userservice.errors.UserNotFoundException;
+import kr.ac.pcu.cyber.userservice.utils.JwtUtil;
+import kr.ac.pcu.cyber.userservice.utils.TokenType;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ public class AuthService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    public AuthService(ModelMapper modelMapper, UserRepository userRepository) {
+    public AuthService(ModelMapper modelMapper, UserRepository userRepository, JwtUtil jwtUtil) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     /**
@@ -33,9 +37,12 @@ public class AuthService {
 
         LoginResponseData responseData = modelMapper.map(user, LoginResponseData.class);
 
-        // jwt 추가
-        responseData.complete("", "");
+        String accessToken = jwtUtil.generateToken(uuid, TokenType.ACCESS_TOKEN);
+        String refreshToken = jwtUtil.generateToken(uuid, TokenType.REFRESH_TOKEN);
+
+        responseData.complete(accessToken, refreshToken);
 
         return responseData;
     }
+
 }

@@ -16,7 +16,10 @@
 # 기능
 
 - 사용자 회원가입
+  - 회원 저장
+  - **존재하는 사용자인가 또한 확인하면 좋을듯**
 - 사용자 로그인
+  - 존재하지 않는 사용자
 - Silent-Refresh
 - 로그아웃
 - 닉네임, 프로필 수정
@@ -27,7 +30,8 @@
 - controller advice
     - UserNotFoundException
     - InvalidTokenException
-    - ExpiredTokenException
+    - TokenExpiredException
+    - EmptyTokenException
 - auth controller
     - **로그인** GET : login/{UUID}
     - **회원가입** POST : register
@@ -37,31 +41,7 @@
     - **사용자 정보 변경** PATCH : users/{user_id}
     - **회원 탈퇴** DELETE : users/{user_id}
 
-### 사용자 회원가입
-
-body 로 들어온 email, nickname, profile_url 을 받아서 회원 저장 후 해당 회원의 UUID, access_token, refresh_token 반환
-
-### 사용자 로그인
-
-path var 로 들어온 UUID 에 따라서 access_token, refresh_token 문자열 반환
-
-### Silent-Refresh
-
-request cookie 의 refresh_token 
-
-### 로그아웃
-
-user 의 unregisteredAt 에 추가
-
-### 닉네임, 프로필 수정
-
-request cookie 의 access-token 이 valid 하고 파싱한 UUID 값이 동일할 때 수정 가능, 그 이외에는 403
-
-### 회원 탈퇴
-
-request cookie 의 access-token 이 valid 하고 파싱한 UUID 값이 동일할 때 탈퇴 가능, 그 이외에는 403
-
-
 # 인지 사항
 
-- 현재 포트는 90000 번으로 Random port 로 지정해야 함 
+- 현재 포트는 90000 번으로 Random port 로 지정해야 함
+- 존재하는 사용자가 회원가입을 할 때 처리도 필요할듯

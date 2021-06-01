@@ -4,6 +4,7 @@ import kr.ac.pcu.cyber.userservice.domain.dto.LoginResponseData;
 import kr.ac.pcu.cyber.userservice.domain.entity.User;
 import kr.ac.pcu.cyber.userservice.domain.repository.UserRepository;
 import kr.ac.pcu.cyber.userservice.errors.UserNotFoundException;
+import kr.ac.pcu.cyber.userservice.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ class AuthServiceTest {
 
     private static final Long USER_ID = 1004L;
     private static final String NICKNAME = "james";
+    private static final String SECRET = "12345678901234567890123456789012";
     private static final String VALID_UUID = "2f48f241-9d64-4d16-bf56-70b9d4e0e79a";
     private static final String INVALID_UUID = "3d87cc41-i5d6-7da0-5bbf-0e7b9d4e9a70";
     private static final String EMAIL = "james123@gmail.com";
@@ -31,7 +33,9 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() {
         ModelMapper modelMapper = new ModelMapper();
-        authService = new AuthService(modelMapper, userRepository);
+
+        JwtUtil jwtUtil = new JwtUtil(SECRET);
+        authService = new AuthService(modelMapper, userRepository, jwtUtil);
 
         User user = User.builder()
                 .id(USER_ID)
@@ -52,6 +56,7 @@ class AuthServiceTest {
         LoginResponseData loginResponseData = authService.login(VALID_UUID);
 
         assertEquals(loginResponseData.getNickname(), NICKNAME);
+        assertNotEquals(loginResponseData.getAccessToken(), "");
     }
 
     @Test

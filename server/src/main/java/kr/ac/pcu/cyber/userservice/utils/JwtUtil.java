@@ -29,7 +29,7 @@ public class JwtUtil {
     }
 
     /**
-     * 사용자 UUID 를 받아 access_token 생성
+     * 사용자 UUID 와 TokenType 을 를 받아 access, refresh 생성
      *
      * @param uuid 사용자 UUID
      * @param type AccessToken, RefreshToken 타입
