@@ -8,6 +8,11 @@
 - [ ] user controller 작업
 - [ ] Test Coverage 100% 
 
+# my todo
+
+- [ ] UserNotFoundException 테스트
+- [ ] AuthService login 메서드에 jwt 추가
+
 # 기능
 
 - 사용자 회원가입
