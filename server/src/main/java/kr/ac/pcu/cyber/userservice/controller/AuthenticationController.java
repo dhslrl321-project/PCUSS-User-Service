@@ -1,7 +1,7 @@
 package kr.ac.pcu.cyber.userservice.controller;
 
 import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
-import kr.ac.pcu.cyber.userservice.domain.dto.RegisterData;
+import kr.ac.pcu.cyber.userservice.domain.dto.RegisterRequestData;
 import kr.ac.pcu.cyber.userservice.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseData> register(@RequestBody RegisterData registerData) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(registerData));
+    public ResponseEntity<AuthResponseData> register(@RequestBody RegisterRequestData registerRequestData) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(registerRequestData));
     }
 }

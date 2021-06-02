@@ -1,7 +1,7 @@
 package kr.ac.pcu.cyber.userservice.service;
 
 import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
-import kr.ac.pcu.cyber.userservice.domain.dto.RegisterData;
+import kr.ac.pcu.cyber.userservice.domain.dto.RegisterRequestData;
 import kr.ac.pcu.cyber.userservice.domain.entity.User;
 import kr.ac.pcu.cyber.userservice.domain.repository.UserRepository;
 import kr.ac.pcu.cyber.userservice.errors.UserNotFoundException;
@@ -76,13 +76,13 @@ class AuthenticationServiceTest {
     @Test
     @DisplayName("register 성공")
     void register_valid() {
-        RegisterData registerData = RegisterData.builder()
+        RegisterRequestData registerRequestData = RegisterRequestData.builder()
                 .email(EMAIL)
                 .nickname(NICKNAME)
                 .profileUrl(PROFILE_URL)
                 .build();
 
-        AuthResponseData responseData = authenticationService.register(registerData);
+        AuthResponseData responseData = authenticationService.register(registerRequestData);
 
         assertNotNull(responseData.getId());
         assertEquals(responseData.getNickname(), NICKNAME);

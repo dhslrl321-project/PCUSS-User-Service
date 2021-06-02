@@ -1,7 +1,7 @@
 package kr.ac.pcu.cyber.userservice.service;
 
 import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
-import kr.ac.pcu.cyber.userservice.domain.dto.RegisterData;
+import kr.ac.pcu.cyber.userservice.domain.dto.RegisterRequestData;
 import kr.ac.pcu.cyber.userservice.domain.entity.User;
 import kr.ac.pcu.cyber.userservice.domain.repository.UserRepository;
 import kr.ac.pcu.cyber.userservice.errors.UserNotFoundException;
@@ -9,6 +9,9 @@ import kr.ac.pcu.cyber.userservice.utils.JwtUtil;
 import kr.ac.pcu.cyber.userservice.utils.TokenType;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import java.net.CookieStore;
 
 @Service
 public class AuthenticationService {
@@ -46,9 +49,9 @@ public class AuthenticationService {
      * @param
      * @return AuthResponseData (accessToken, refreshToken, id, nickname, uuid, profileUrl)
      */
-    public AuthResponseData register(RegisterData registerData) {
+    public AuthResponseData register(RegisterRequestData registerRequestData) {
         User user = new User();
-        user.enroll(registerData);
+        user.enroll(registerRequestData);
 
         User savedUser = userRepository.save(user);
 
@@ -56,6 +59,26 @@ public class AuthenticationService {
         tokenDispenser(jwtUtil, responseData);
 
         return responseData;
+    }
+
+    /**
+     * 쿠키에 존재하는 refresh_token 을 검증하고 새로운 access_token 을 cookie 에 추가한 후 반환한다.
+     *
+     * @param
+     * @return
+     */
+    public void refreshingAccessToken(Cookie[] cookies) {
+
+    }
+
+    /**
+     * 쿠키에 존재하는 모든 토큰을 제거한다.
+     *
+     * @param
+     * @return
+     */
+    public void logout() {
+
     }
 
     /**

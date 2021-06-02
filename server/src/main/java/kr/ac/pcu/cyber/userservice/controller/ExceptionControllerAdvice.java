@@ -1,6 +1,6 @@
 package kr.ac.pcu.cyber.userservice.controller;
 
-import kr.ac.pcu.cyber.userservice.domain.dto.ErrorResponse;
+import kr.ac.pcu.cyber.userservice.domain.dto.ErrorResponseData;
 import kr.ac.pcu.cyber.userservice.errors.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,7 +14,7 @@ public class ExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleNotFoundUser(UserNotFoundException e) {
-        return new ErrorResponse(e.getMessage());
+    public ErrorResponseData handleNotFoundUser(UserNotFoundException e) {
+        return new ErrorResponseData(e.getMessage());
     }
 }

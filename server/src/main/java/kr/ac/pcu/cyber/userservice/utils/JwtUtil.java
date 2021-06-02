@@ -30,11 +30,11 @@ public class JwtUtil {
     /**
      * 사용자 UUID 와 TokenType 을 를 받아 access, refresh 생성
      *
-     * @param uuid 사용자 UUID
+     * @param userId 사용자 UUID
      * @param type AccessToken, RefreshToken 타입
      * @return Jwt 토큰
      */
-    public String generateToken(String uuid, TokenType type) {
+    public String generateToken(String userId, TokenType type) {
 
         Date expiredAt;
 
@@ -45,7 +45,7 @@ public class JwtUtil {
         }
 
         return Jwts.builder()
-                .claim("uuid", uuid)
+                .claim("userId", userId)
                 .setExpiration(expiredAt)
                 .signWith(key)
                 .compact();

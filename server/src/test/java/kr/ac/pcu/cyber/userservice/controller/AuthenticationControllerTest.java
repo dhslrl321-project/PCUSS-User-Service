@@ -2,7 +2,7 @@ package kr.ac.pcu.cyber.userservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
-import kr.ac.pcu.cyber.userservice.domain.dto.RegisterData;
+import kr.ac.pcu.cyber.userservice.domain.dto.RegisterRequestData;
 import kr.ac.pcu.cyber.userservice.errors.UserNotFoundException;
 import kr.ac.pcu.cyber.userservice.service.AuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +58,7 @@ class AuthenticationControllerTest {
         given(authenticationService.login(VALID_UUID)).willReturn(authResponseData);
         given(authenticationService.login(INVALID_UUID)).willThrow(userNotFoundException);
 
-        given(authenticationService.register(any(RegisterData.class))).willReturn(authResponseData);
+        given(authenticationService.register(any(RegisterRequestData.class))).willReturn(authResponseData);
     }
 
     @Test
@@ -91,7 +91,7 @@ class AuthenticationControllerTest {
     @DisplayName("회원가입 - 정상")
     void register_valid() throws Exception {
 
-        RegisterData registerData = RegisterData.builder()
+        RegisterRequestData registerRequestData = RegisterRequestData.builder()
                 .email(EMAIL)
                 .nickname(NICKNAME)
                 .profileUrl(PROFILE_URL)
@@ -99,7 +99,7 @@ class AuthenticationControllerTest {
 
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerData)))
+                        .content(objectMapper.writeValueAsString(registerRequestData)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
@@ -107,7 +107,6 @@ class AuthenticationControllerTest {
                 .andExpect(jsonPath("accessToken").exists())
                 .andExpect(jsonPath("refreshToken").exists())
                 .andExpect(jsonPath("nickname").exists())
-                .andExpect(jsonPath("profileUrl").exists())
-                .andExpect(jsonPath("userId").exists());
+                .andExpect(jsonPath("profileUrl").exists());
     }
 }
