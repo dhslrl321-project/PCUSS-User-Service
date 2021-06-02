@@ -12,7 +12,7 @@
 
 - [x] UserNotFoundException 테스트
 - [x] AuthService login 메서드에 jwt 추가
-- [ ] security 추가 ()
+- [ ] security 추가 (filter 추가, httpSecurity, authentication 추가)
 - [ ] 로그아웃 구현
 
 # 기능
