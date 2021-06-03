@@ -34,9 +34,11 @@ public class AuthenticationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
 
-        if(request.getCookies() != null) {
-            String userId = authenticationService.parseUserIdFromCookies(request.getCookies());
+        String requestURI = request.getRequestURI();
 
+        if(request.getCookies() != null) {
+
+            String userId = authenticationService.parseUserIdFromCookies(request.getCookies());
             List<Role> roles = authenticationService.getRoles(userId);
 
             CustomUserAuthentication customUserAuthentication = new CustomUserAuthentication(

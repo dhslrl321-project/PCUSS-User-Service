@@ -80,15 +80,22 @@ public class AuthenticationService {
      * @param request
      */
     public Cookie silentRefresh(HttpServletRequest request) {
-        System.out.println("this iss service");
         if(request.getCookies() == null) {
             throw new EmptyCookieException();
         }
         String refreshToken = cookieUtil.parseTokenFromCookies(
                 request.getCookies(),
                 TokenType.REFRESH_TOKEN);
+        System.out.println("refreshToken = " + refreshToken);
+        System.out.println("service 에서 jwt Util 들어가기 전임");
+
+
         Claims claims = jwtUtil.parseToken(refreshToken);
         String userId = claims.get("userId", String.class);
+
+        // ***
+        System.out.println("(AuthenticationService_silent_refresh 메서드) userId = " + userId);
+        // ***
 
         String newAccessToken = jwtUtil.generateToken(userId, TokenType.ACCESS_TOKEN);
 
@@ -118,7 +125,7 @@ public class AuthenticationService {
      * @return userId : accessToken 이 담긴 cookie 에서 토큰을 파싱하고 userId 를 반환한다.
      */
     public String parseUserIdFromCookies(Cookie[] cookies) {
-        String accessToken = cookieUtil.parseTokenFromCookies(cookies, TokenType.ACCESS_TOKEN);
+        String accessToken = cookieUtil.parseTokenFromCookies(cookies, TokenType.REFRESH_TOKEN);
         Claims claims = jwtUtil.parseToken(accessToken);
         return claims.get("userId", String.class);
     }
