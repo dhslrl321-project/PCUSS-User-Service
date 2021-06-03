@@ -57,4 +57,26 @@ class UserRepositoryTest {
         User selectedUser = optionalUser.get();
         assertEquals(selectedUser.getNickname(), nickname);
     }
+
+    @Test
+    @DisplayName("userId 로 사용자 조회")
+    void existsByUserId_valid() {
+
+        // given
+        String userId = UUID.randomUUID().toString();
+
+        User user = User.builder()
+                .email("test123@gmail.com")
+                .nickname("james")
+                .userId(userId)
+                .build();
+
+        userRepository.save(user);
+
+        // when
+        boolean isExists = userRepository.existsByUserId(userId);
+
+        // then
+        assertTrue(isExists);
+    }
 }

@@ -11,8 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -32,8 +37,8 @@ class AuthenticationControllerTest {
     private static final String PROFILE_URL = "https://cdn.kakao.com/images/james";
 
     private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
-            "eyJ1dWlkIjoiMmY0OGYyNDEtOWQ2NC00ZDE2LWJmNTYtNzBiOWQ0ZTBlNzlhIiwiZXhwIjoxNjIyNjM2Nzc3fQ.J" +
-            "gzsO-ovbRtts6ufTaix37R12T5Ngqd4cnxIxJ1IgOQ";
+            "eyJ1c2VySWQiOiIyZjQ4ZjI0MS05ZDY0LTRkMTYtYmY1Ni03MGI5ZDRlMGU3OWEifQ." +
+            "diJ35TNZtRqYIkkiUZX0JC0IQ_Yia8c5p8FDd_FMgYo";
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,19 +58,34 @@ class AuthenticationControllerTest {
                 .nickname(NICKNAME)
                 .profileUrl(PROFILE_URL)
                 .build();
+
+        Cookie cookie = new Cookie("access_token", VALID_TOKEN);
+        cookie.setMaxAge(100000);
+        cookie.setHttpOnly(true);
+
         UserNotFoundException userNotFoundException = new UserNotFoundException(INVALID_UUID);
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("set-cookie", "access_token=null; max-age=0");
+        headers.add("set-cookie", "refresh_token=null; max-age=0");
 
         given(authenticationService.login(VALID_UUID)).willReturn(authResponseData);
         given(authenticationService.login(INVALID_UUID)).willThrow(userNotFoundException);
 
         given(authenticationService.register(any(RegisterRequestData.class))).willReturn(authResponseData);
+
+        given(authenticationService.silentRefresh(any(HttpServletRequest.class))).willReturn(cookie);
+
+        given(authenticationService.clearAllCookies()).willReturn(headers);
     }
 
     @Test
     @DisplayName("로그인 - 정상 UUID")
     void login_valid() throws Exception{
         mockMvc.perform(get("/auth/login/{uuid}", VALID_UUID)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("asdf", "sd")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").exists())
@@ -108,5 +128,28 @@ class AuthenticationControllerTest {
                 .andExpect(jsonPath("refreshToken").exists())
                 .andExpect(jsonPath("nickname").exists())
                 .andExpect(jsonPath("profileUrl").exists());
+    }
+
+    @Test
+    @DisplayName("silent-refresh 정상")
+    void silentRefresh_valid() throws Exception {
+        // given
+        Cookie accessCookie = new Cookie("access_token", VALID_TOKEN);
+        Cookie refreshCookie = new Cookie("refresh_token", VALID_TOKEN);
+
+        // when & then
+        mockMvc.perform(get("/auth/silent-refresh")
+                        .cookie(accessCookie)
+                        .cookie(refreshCookie))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("logout 정상")
+    void logout_valid() throws Exception {
+        mockMvc.perform(get("/auth/logout"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }

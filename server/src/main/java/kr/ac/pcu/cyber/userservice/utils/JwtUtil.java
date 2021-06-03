@@ -39,9 +39,9 @@ public class JwtUtil {
         Date expiredAt;
 
         if(type.equals(TokenType.ACCESS_TOKEN)) { // accessToken 일 때
-            expiredAt = new Date(now.getTime() + ONE_DAY);
+            expiredAt = new Date(123412341234L);
         }else { // refreshToken 일 때
-            expiredAt = new Date(now.getTime() + ONE_MONTH);
+            expiredAt = new Date(123412341L);
         }
 
         return Jwts.builder()
