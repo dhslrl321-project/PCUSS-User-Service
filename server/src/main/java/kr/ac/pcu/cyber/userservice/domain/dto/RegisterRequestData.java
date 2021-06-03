@@ -5,7 +5,7 @@ import lombok.*;
 @Getter @Setter @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterData {
+public class RegisterRequestData {
     private String email;
     private String nickname;
     private String profileUrl;
