@@ -32,7 +32,7 @@ class RoleRepositoryTest {
         User user = User.builder()
                 .nickname("james")
                 .email("james123@gmail.com")
-                .profileUrl("https://cdn.kakao.com/fi")
+                .profileImage("https://cdn.kakao.com/fi")
                 .userId(userId)
                 .build();
 
@@ -43,6 +43,6 @@ class RoleRepositoryTest {
         Role savedRole = roleRepository.save(role);
 
         // then
-        assertEquals(savedRole.getRoleType(), RoleType.USER);
+        assertEquals(RoleType.USER, savedRole.getRoleType());
     }
 }

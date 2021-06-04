@@ -21,9 +21,9 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/login/{uuid}")
-    public ResponseEntity<AuthResponseData> login(@PathVariable String uuid) {
-        return ResponseEntity.ok(authenticationService.login(uuid));
+    @GetMapping("/login/{userId}")
+    public ResponseEntity<AuthResponseData> login(@PathVariable String userId) {
+        return ResponseEntity.ok(authenticationService.login(userId));
     }
 
     @PostMapping("/register")
