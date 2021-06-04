@@ -30,7 +30,12 @@ public class CustomUserAuthentication extends AbstractAuthenticationToken {
     }
 
     @Override
-    public Object getPrincipal() {
-        return null;
+    public String getPrincipal() {
+        return userId;
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        return true;
     }
 }

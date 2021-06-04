@@ -18,7 +18,7 @@ class RoleTest {
         Role role = new Role(VALID_UUID, roleType);
 
         // then
-        assertEquals(role.getRoleType(), roleType);
+        assertEquals(roleType, role.getRoleType());
     }
 
     @Test
@@ -28,7 +28,7 @@ class RoleTest {
 
         Role role = new Role(roleType);
 
-        assertEquals(role.getRoleType(), roleType);
+        assertEquals(roleType, role.getRoleType());
     }
 
 }

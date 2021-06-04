@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
 import kr.ac.pcu.cyber.userservice.domain.dto.RegisterRequestData;
 import kr.ac.pcu.cyber.userservice.domain.entity.Role;
+import kr.ac.pcu.cyber.userservice.domain.entity.RoleType;
 import kr.ac.pcu.cyber.userservice.domain.entity.User;
 import kr.ac.pcu.cyber.userservice.domain.repository.RoleRepository;
 import kr.ac.pcu.cyber.userservice.domain.repository.UserRepository;
@@ -31,7 +32,12 @@ public class AuthenticationService {
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
 
-    public AuthenticationService(ModelMapper modelMapper, UserRepository userRepository, RoleRepository roleRepository, JwtUtil jwtUtil, CookieUtil cookieUtil) {
+    public AuthenticationService(ModelMapper modelMapper,
+                                 UserRepository userRepository,
+                                 RoleRepository roleRepository,
+                                 JwtUtil jwtUtil,
+                                 CookieUtil cookieUtil) {
+
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -43,7 +49,7 @@ public class AuthenticationService {
      * userId 로 사용자 정보를 반환한다.
      *
      * @param userId Auth 서버로 부터 넘어온 사용자 userId
-     * @return accessToken, refreshToken, nickname, profileUrl 데이터
+     * @return accessToken, refreshToken, nickname, profileImage 데이터
      * @throws UserNotFoundException
      */
     public AuthResponseData login(String userId) {
@@ -60,7 +66,7 @@ public class AuthenticationService {
      * body 로 들어오는 nickname, email, profile 정보로 사용자를 저장(회원가입)한다.
      *
      * @param
-     * @return AuthResponseData (accessToken, refreshToken, id, nickname, uuid, profileUrl)
+     * @return AuthResponseData (accessToken, refreshToken, id, nickname, uuid, profileImage)
      */
     public AuthResponseData register(RegisterRequestData registerRequestData) {
         User user = new User();
@@ -71,6 +77,8 @@ public class AuthenticationService {
         AuthResponseData responseData = modelMapper.map(savedUser, AuthResponseData.class);
         tokenDispenser(jwtUtil, responseData);
 
+        roleRepository.save(new Role(user.getUserId(), RoleType.USER));
+
         return responseData;
     }
 
@@ -80,22 +88,17 @@ public class AuthenticationService {
      * @param request
      */
     public Cookie silentRefresh(HttpServletRequest request) {
+
         if(request.getCookies() == null) {
             throw new EmptyCookieException();
         }
+
         String refreshToken = cookieUtil.parseTokenFromCookies(
                 request.getCookies(),
                 TokenType.REFRESH_TOKEN);
-        System.out.println("refreshToken = " + refreshToken);
-        System.out.println("service 에서 jwt Util 들어가기 전임");
-
 
         Claims claims = jwtUtil.parseToken(refreshToken);
         String userId = claims.get("userId", String.class);
-
-        // ***
-        System.out.println("(AuthenticationService_silent_refresh 메서드) userId = " + userId);
-        // ***
 
         String newAccessToken = jwtUtil.generateToken(userId, TokenType.ACCESS_TOKEN);
 
@@ -106,8 +109,7 @@ public class AuthenticationService {
     /**
      * 쿠키에 존재하는 모든 토큰을 제거한다.
      *
-     * @param
-     * @return
+     * @return set-cookie 로 access_token 의 max-age 와 value 를 null 하는 HttpHeaders
      */
     public HttpHeaders clearAllCookies() {
         HttpHeaders headers = new HttpHeaders();

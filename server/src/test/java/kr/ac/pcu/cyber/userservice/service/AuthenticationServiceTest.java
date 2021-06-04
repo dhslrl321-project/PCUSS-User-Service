@@ -37,7 +37,7 @@ class AuthenticationServiceTest {
     private static final String VALID_UUID = "2f48f241-9d64-4d16-bf56-70b9d4e0e79a";
     private static final String INVALID_UUID = "3d87cc41-i5d6-7da0-5bbf-0e7b9d4e9a70";
     private static final String EMAIL = "james123@gmail.com";
-    private static final String PROFILE_URL = "https://cdn.kakao.com/images/james";
+    private static final String PROFILE_IMAGE = "https://cdn.kakao.com/images/james";
 
     private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
             "eyJ1c2VySWQiOiIyZjQ4ZjI0MS05ZDY0LTRkMTYtYmY1Ni03MGI5ZDRlMGU3OWEifQ." +
@@ -60,7 +60,7 @@ class AuthenticationServiceTest {
                 .id(USER_ID)
                 .nickname(NICKNAME)
                 .email(EMAIL)
-                .profileUrl(PROFILE_URL)
+                .profileImage(PROFILE_IMAGE)
                 .userId(VALID_UUID)
                 .build();
 
@@ -70,6 +70,10 @@ class AuthenticationServiceTest {
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(RoleType.USER));
         roles.add(new Role(RoleType.ADMIN));
+
+        Role role = new Role(RoleType.USER);
+
+        given(roleRepository.save(any(Role.class))).willReturn(role);
 
         given(userRepository.findByUserId(VALID_UUID)).willReturn(Optional.of(user));
         given(userRepository.findByUserId(INVALID_UUID)).willReturn(Optional.empty());
@@ -89,8 +93,8 @@ class AuthenticationServiceTest {
     void login_valid() {
         AuthResponseData responseData = authenticationService.login(VALID_UUID);
 
-        assertEquals(responseData.getNickname(), NICKNAME);
-        assertNotEquals(responseData.getAccessToken(), "");
+        assertEquals(NICKNAME, responseData.getNickname());
+        assertNotEquals("", responseData.getAccessToken());
     }
 
     @Test
@@ -109,14 +113,14 @@ class AuthenticationServiceTest {
         RegisterRequestData registerRequestData = RegisterRequestData.builder()
                 .email(EMAIL)
                 .nickname(NICKNAME)
-                .profileUrl(PROFILE_URL)
+                .profileImage(PROFILE_IMAGE)
                 .build();
 
         AuthResponseData responseData = authenticationService.register(registerRequestData);
 
         assertNotNull(responseData.getId());
-        assertEquals(responseData.getNickname(), NICKNAME);
-        assertNotEquals(responseData.getAccessToken(), "");
+        assertEquals(NICKNAME, responseData.getNickname());
+        assertNotEquals( "", responseData.getAccessToken());
     }
 
     @Test
@@ -126,12 +130,12 @@ class AuthenticationServiceTest {
 
         String userId = authenticationService.parseUserIdFromCookies(cookies);
 
-        assertEquals(userId, VALID_UUID);
+        assertEquals(VALID_UUID, userId);
     }
 
     @Test
     @DisplayName("silentRefresh - 실패")
-    void silentRefresh_valid() {
+    void silentRefresh_invalid() {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
 

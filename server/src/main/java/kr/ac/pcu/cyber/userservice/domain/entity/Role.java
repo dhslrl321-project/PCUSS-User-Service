@@ -2,14 +2,10 @@ package kr.ac.pcu.cyber.userservice.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +13,7 @@ public class Role {
     private String userId;
 
     @Getter
+    @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
     public Role(String userId, RoleType roleType) {

@@ -5,8 +5,7 @@ import lombok.*;
 @Getter @Setter @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequestData {
-    private String email;
+public class ModifyRequestData {
     private String nickname;
     private String profileImage;
 }

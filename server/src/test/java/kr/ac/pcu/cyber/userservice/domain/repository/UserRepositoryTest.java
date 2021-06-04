@@ -32,7 +32,7 @@ class UserRepositoryTest {
 
         User savedUser = userRepository.save(user);
 
-        assertEquals(savedUser.getNickname(), nickname);
+        assertEquals(nickname, savedUser.getNickname());
     }
 
     @Test
@@ -55,7 +55,7 @@ class UserRepositoryTest {
 
         // then
         User selectedUser = optionalUser.get();
-        assertEquals(selectedUser.getNickname(), nickname);
+        assertEquals(nickname, selectedUser.getNickname());
     }
 
     @Test
@@ -79,4 +79,5 @@ class UserRepositoryTest {
         // then
         assertTrue(isExists);
     }
+
 }
