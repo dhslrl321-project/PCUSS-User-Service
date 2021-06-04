@@ -10,6 +10,7 @@ import javax.servlet.http.Cookie;
 @Component
 public class CookieUtil {
 
+    // integerOverflow 발생하니까 변경 요망, 아래 의존 코드 존재함
     private final int ONE_DAY = 1000 * 60 * 60 * 24;
     private final int ONE_MONTH = (1000 * 60 * 60 * 24) * 30;
 
