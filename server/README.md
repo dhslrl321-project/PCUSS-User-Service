@@ -5,8 +5,8 @@
 - [x] api 작성
 - [x] ControllerAdvice 생성
 - [x] auth controller 작업
-- [ ] user controller 작업
-- [ ] Test Coverage 80%
+- [x] user controller 작업
+- [x] Test Coverage 90%
 
 # my todo
 
@@ -18,10 +18,10 @@
 - [x] Test Assertions 문 expected, actual 자리 변경하기
 - [x] Entity, Dto 이름 변경하기 : profileUrl -> profileImage
 - [x] User update 추가
-- [ ] JpaAuditing 추가하기 (registeredAt, unregisteredAt, lastModifiedAt)
-- [ ] 회원 탈퇴 추가
-- [ ] Coverage 80% 확인하기
+- [x] 회원 탈퇴 추가
+- [x] Coverage 80% 확인하기
 - [ ] 리팩토링
+- [ ] 권한 확인 추가
 
 # 기능
 
