@@ -12,9 +12,16 @@
 
 - [x] UserNotFoundException 테스트
 - [x] AuthService login 메서드에 jwt 추가
-- [ ] security 추가 (filter 추가, httpSecurity, authentication 추가)
-- [ ] 로그아웃 구현
-- [ ] Role Endpoint 추가
+- [x] security 추가 (filter 추가, httpSecurity, authentication 추가)
+- [x] 로그아웃 구현
+- [x] Role Endpoint 추가
+- [x] Test Assertions 문 expected, actual 자리 변경하기
+- [x] Entity, Dto 이름 변경하기 : profileUrl -> profileImage
+- [x] User update 추가
+- [ ] JpaAuditing 추가하기 (registeredAt, unregisteredAt, lastModifiedAt)
+- [ ] 회원 탈퇴 추가
+- [ ] Coverage 80% 확인하기
+- [ ] 리팩토링
 
 # 기능
 
@@ -27,7 +34,6 @@
   - 쿠키로부터 토큰 파싱 : `String parseTokenStringFromCookies(Cookie[] cookies, TokenType tokenType);`
     - TokenType.ACCESS_TOKEN
     - TokenType.REFRESH_TOKEN
-  - 로그아웃에 사용될 요청의 쿠키 제거 `Dto RemoveTokenFromCookies();`
 - 사용자
   - 닉네임, 프로필 수정
   - 회원 탈퇴
@@ -43,11 +49,14 @@
 - auth controller
     - **로그인** GET : login/{UUID}
     - **회원가입** POST : register
-    - **로그아웃** POST : logout
+    - **로그아웃** GET : logout
     - **Silent-Refresh** GET : silent-refresh
 - user controller
-    - **사용자 정보 변경** PATCH : users/{user_id}
-    - **회원 탈퇴** DELETE : users/{user_id}
+    - **사용자 정보 변경** PATCH : users/{id}
+      - nickname 변경하기
+      - profileImage 변경하기
+    - **회원 탈퇴** DELETE : users/{id}
+      - unregisteredAt 추가하기
 
 # 인지 사항
 

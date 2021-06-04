@@ -3,16 +3,14 @@ package kr.ac.pcu.cyber.userservice.filter;
 import kr.ac.pcu.cyber.userservice.domain.entity.Role;
 import kr.ac.pcu.cyber.userservice.security.CustomUserAuthentication;
 import kr.ac.pcu.cyber.userservice.service.AuthenticationService;
-import kr.ac.pcu.cyber.userservice.utils.CookieUtil;
-import kr.ac.pcu.cyber.userservice.utils.TokenType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,14 +32,12 @@ public class AuthenticationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
 
-        String requestURI = request.getRequestURI();
-
         if(request.getCookies() != null) {
 
             String userId = authenticationService.parseUserIdFromCookies(request.getCookies());
             List<Role> roles = authenticationService.getRoles(userId);
 
-            CustomUserAuthentication customUserAuthentication = new CustomUserAuthentication(
+            Authentication customUserAuthentication = new CustomUserAuthentication(
                     userId,
                     roles
             );

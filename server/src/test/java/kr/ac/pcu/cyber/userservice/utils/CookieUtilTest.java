@@ -41,7 +41,7 @@ class CookieUtilTest {
         String token = cookieUtil.parseTokenFromCookies(cookies, TokenType.ACCESS_TOKEN);
 
         // then
-        assertEquals(token, VALID_TOKEN);
+        assertEquals(VALID_TOKEN, token);
     }
 
     @Test
@@ -58,7 +58,7 @@ class CookieUtilTest {
         String token = cookieUtil.parseTokenFromCookies(cookies, TokenType.REFRESH_TOKEN);
 
         // then
-        assertEquals(token, VALID_TOKEN);
+        assertEquals(VALID_TOKEN, token);
     }
 
     @Test
@@ -88,8 +88,8 @@ class CookieUtilTest {
 
         // then
         assertAll(
-                () ->assertEquals(cookie.getName(), TokenType.ACCESS_TOKEN.toString().toLowerCase()),
-                () -> assertEquals(cookie.getValue(), VALID_TOKEN)
+                () ->assertEquals(TokenType.ACCESS_TOKEN.toString().toLowerCase(), cookie.getName()),
+                () -> assertEquals(VALID_TOKEN, cookie.getValue())
         );
 
     }
@@ -113,8 +113,8 @@ class CookieUtilTest {
 
         // then
         assertAll(
-                () -> assertEquals(cookie1.getMaxAge(), 0),
-                () -> assertEquals(cookie2.getMaxAge(), 0)
+                () -> assertEquals(0, cookie1.getMaxAge()),
+                () -> assertEquals(0, cookie2.getMaxAge())
         );
     }
 

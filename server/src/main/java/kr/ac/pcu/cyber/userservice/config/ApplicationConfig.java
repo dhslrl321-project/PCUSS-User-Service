@@ -1,12 +1,12 @@
 package kr.ac.pcu.cyber.userservice.config;
 
-import kr.ac.pcu.cyber.userservice.utils.CookieUtil;
-import kr.ac.pcu.cyber.userservice.utils.JwtUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Component;
 
 @Component
+@EnableJpaAuditing
 public class ApplicationConfig {
     @Bean
     public ModelMapper modelMapper() { return new ModelMapper(); }
