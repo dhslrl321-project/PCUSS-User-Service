@@ -71,6 +71,10 @@ class AuthenticationServiceTest {
         roles.add(new Role(RoleType.USER));
         roles.add(new Role(RoleType.ADMIN));
 
+        Role role = new Role(RoleType.USER);
+
+        given(roleRepository.save(any(Role.class))).willReturn(role);
+
         given(userRepository.findByUserId(VALID_UUID)).willReturn(Optional.of(user));
         given(userRepository.findByUserId(INVALID_UUID)).willReturn(Optional.empty());
         given(userRepository.save(any(User.class))).willReturn(user);
@@ -131,7 +135,7 @@ class AuthenticationServiceTest {
 
     @Test
     @DisplayName("silentRefresh - 실패")
-    void silentRefresh_valid() {
+    void silentRefresh_invalid() {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
 

@@ -33,7 +33,6 @@ public class AuthenticationFilter extends BasicAuthenticationFilter {
                                     FilterChain chain) throws IOException, ServletException {
 
         if(request.getCookies() != null) {
-
             String userId = authenticationService.parseUserIdFromCookies(request.getCookies());
             List<Role> roles = authenticationService.getRoles(userId);
 

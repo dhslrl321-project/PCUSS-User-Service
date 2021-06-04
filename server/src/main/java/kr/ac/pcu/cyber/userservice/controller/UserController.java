@@ -26,7 +26,6 @@ public class UserController {
                                        CustomUserAuthentication authentication) {
 
         String userId = authentication.getPrincipal();
-        System.out.println("userId = " + userId);
 
         return ResponseEntity.ok(
                 userService.modifyUser(id, modifyRequestData, userId)

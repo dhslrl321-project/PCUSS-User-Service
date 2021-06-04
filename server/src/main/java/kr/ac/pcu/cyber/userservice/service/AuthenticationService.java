@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import kr.ac.pcu.cyber.userservice.domain.dto.AuthResponseData;
 import kr.ac.pcu.cyber.userservice.domain.dto.RegisterRequestData;
 import kr.ac.pcu.cyber.userservice.domain.entity.Role;
+import kr.ac.pcu.cyber.userservice.domain.entity.RoleType;
 import kr.ac.pcu.cyber.userservice.domain.entity.User;
 import kr.ac.pcu.cyber.userservice.domain.repository.RoleRepository;
 import kr.ac.pcu.cyber.userservice.domain.repository.UserRepository;
@@ -31,7 +32,12 @@ public class AuthenticationService {
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
 
-    public AuthenticationService(ModelMapper modelMapper, UserRepository userRepository, RoleRepository roleRepository, JwtUtil jwtUtil, CookieUtil cookieUtil) {
+    public AuthenticationService(ModelMapper modelMapper,
+                                 UserRepository userRepository,
+                                 RoleRepository roleRepository,
+                                 JwtUtil jwtUtil,
+                                 CookieUtil cookieUtil) {
+
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -70,6 +76,8 @@ public class AuthenticationService {
 
         AuthResponseData responseData = modelMapper.map(savedUser, AuthResponseData.class);
         tokenDispenser(jwtUtil, responseData);
+
+        roleRepository.save(new Role(user.getUserId(), RoleType.USER));
 
         return responseData;
     }
