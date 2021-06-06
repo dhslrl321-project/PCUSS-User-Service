@@ -1,8 +1,6 @@
 package kr.ac.pcu.cyber.userservice.utils;
 
-import io.jsonwebtoken.Claims;
 import kr.ac.pcu.cyber.userservice.errors.EmptyCookieException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
