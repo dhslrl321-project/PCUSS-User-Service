@@ -33,9 +33,7 @@ public class AuthenticationController {
 
     @GetMapping("/silent-refresh")
     public ResponseEntity silentRefresh(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("silent refresh 컨트롤러 호출");
         Cookie cookie = authenticationService.silentRefresh(request);
-        System.out.println("silentRefresh 컨트롤러에서 반환하는 새로운 쿠키 : " + cookie.getName() + " " + cookie.getValue());
         response.addCookie(cookie);
         return ResponseEntity.ok().build();
     }
