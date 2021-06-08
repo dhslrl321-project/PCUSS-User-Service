@@ -16,8 +16,8 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final int ONE_DAY = (int) 1000L * 60 * 60 * 24;
-    private final int TWO_WEEK = (int) (1000L * 60 * 60 * 24 * 14);;
+    private final int ONE_DAY = 1000 * 60 * 60 * 24;
+    private final int TWO_WEEK = 1000 * 60 * 60 * 24 * 14;
 
     private final Key key;
 
