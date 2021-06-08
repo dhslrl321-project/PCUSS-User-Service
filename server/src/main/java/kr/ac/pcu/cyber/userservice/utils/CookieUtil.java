@@ -4,6 +4,7 @@ import kr.ac.pcu.cyber.userservice.errors.EmptyCookieException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
+import java.util.Locale;
 
 @Component
 public class CookieUtil {
@@ -25,9 +26,9 @@ public class CookieUtil {
         String cookieName;
 
         if(tokenType.equals(TokenType.ACCESS_TOKEN)) {
-            cookieName = TokenType.ACCESS_TOKEN.toString().toLowerCase();
+            cookieName = String.valueOf(TokenType.ACCESS_TOKEN).toLowerCase();
         }else if(tokenType.equals(TokenType.REFRESH_TOKEN)) {
-            cookieName = TokenType.REFRESH_TOKEN.toString().toLowerCase();
+            cookieName = String.valueOf(TokenType.REFRESH_TOKEN).toLowerCase();
         }else {
             cookieName = "empty";
         }
@@ -37,7 +38,6 @@ public class CookieUtil {
                 return cookie.getValue();
             }
         }
-
 
         throw new EmptyCookieException();
     }
@@ -53,10 +53,10 @@ public class CookieUtil {
         Cookie cookie;
 
         if(tokenType.equals(TokenType.ACCESS_TOKEN)) {
-            cookie = new Cookie(TokenType.ACCESS_TOKEN.toString().toLowerCase(), token);
+            cookie = new Cookie(String.valueOf(TokenType.ACCESS_TOKEN).toLowerCase(), token);
             cookie.setMaxAge(ONE_DAY);
         }else {
-            cookie = new Cookie(TokenType.REFRESH_TOKEN.toString().toLowerCase(), token);
+            cookie = new Cookie(String.valueOf(TokenType.REFRESH_TOKEN).toLowerCase(), token);
             cookie.setMaxAge(ONE_MONTH);
         }
 
@@ -77,9 +77,9 @@ public class CookieUtil {
         String cookieName = "empty";
 
         if(tokenType.equals(TokenType.ACCESS_TOKEN)) {
-            cookieName = TokenType.ACCESS_TOKEN.toString().toLowerCase();
+            cookieName = String.valueOf(TokenType.ACCESS_TOKEN).toLowerCase();
         }else if(tokenType.equals(TokenType.REFRESH_TOKEN)) {
-            cookieName = TokenType.REFRESH_TOKEN.toString().toLowerCase();
+            cookieName = String.valueOf(TokenType.REFRESH_TOKEN).toLowerCase();
         }
 
         for(Cookie cookie : cookies) {
