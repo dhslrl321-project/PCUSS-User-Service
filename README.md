@@ -1,66 +1,219 @@
 # PCUSS-User-Service
 
-# 구현 목록
+# 디렉토리 구조
 
-- [x] 의존성 추가
-- [x] yml 파일 작성
-- [x] api 작성
-- [x] ControllerAdvice 생성
-- [x] auth controller 작업
-- [x] user controller 작업
-- [x] Test Coverage 90%
 
-# my todo
 
-- [x] UserNotFoundException 테스트
-- [x] AuthService login 메서드에 jwt 추가
-- [x] security 추가 (filter 추가, httpSecurity, authentication 추가)
-- [x] 로그아웃 구현
-- [x] Role Endpoint 추가
-- [x] Test Assertions 문 expected, actual 자리 변경하기
-- [x] Entity, Dto 이름 변경하기 : profileUrl -> profileImage
-- [x] User update 추가
-- [x] 회원 탈퇴 추가
-- [x] Coverage 80% 확인하기
-- [x] silent-refresh 에서 회원 정보 body 로 주기
-- [ ] 리팩토링
-
-# 기능
-
-- 사용자 회원가입
-- 사용자 로그인
-- Silent-Refresh
-  - refresh_token 쿠키에 존재하는 토큰 파싱 -> access_token 만료 -> 새로운 access_token 생성 후 ResponseEntity 반환
-- 로그아웃
-- Role -> RoleRepository -> SecurityService -> SecurityController
-  - 쿠키로부터 토큰 파싱 : `String parseTokenStringFromCookies(Cookie[] cookies, TokenType tokenType);`
-    - TokenType.ACCESS_TOKEN
-    - TokenType.REFRESH_TOKEN
-- 사용자
-  - 닉네임, 프로필 수정
-  - 회원 탈퇴
-  - 파싱된 토큰의 소유자가 가지고 있는 Roles `List<Role> getRolesFromUserId(String userId);`
-
-# controller
-
-- controller advice
-    - UserNotFoundException
-    - InvalidTokenException
-    - TokenExpiredException
-    - EmptyTokenException
-- auth controller
-    - **로그인** GET : login/{UUID}
-    - **회원가입** POST : register
-    - **로그아웃** GET : logout
-    - **Silent-Refresh** GET : silent-refresh
-- user controller
-    - **사용자 정보 변경** PATCH : users/{id}
-      - nickname 변경하기
-      - profileImage 변경하기
-    - **회원 탈퇴** DELETE : users/{id}
-      - unregisteredAt 추가하기
-
-# 인지 사항
-
-- 현재 포트는 8083 번으로 Random port 로 지정해야 함
-- 존재하는 사용자가 회원가입을 할 때 처리도 필요할듯
+```
+./
+├── HELP.md
+├── README.md
+├── build
+│   ├── bootJarMainClassName
+│   ├── classes
+│   │   └── java
+│   │       ├── main
+│   │       │   └── kr
+│   │       │       └── ac
+│   │       │           └── pcu
+│   │       │               └── cyber
+│   │       │                   └── userservice
+│   │       │                       ├── UserServiceApplication.class
+│   │       │                       ├── config
+│   │       │                       │   ├── ApplicationConfig.class
+│   │       │                       │   └── SecurityConfig.class
+│   │       │                       ├── controller
+│   │       │                       │   ├── AuthenticationController.class
+│   │       │                       │   ├── ExceptionControllerAdvice.class
+│   │       │                       │   └── UserController.class
+│   │       │                       ├── domain
+│   │       │                       │   ├── dto
+│   │       │                       │   │   ├── AuthResponseData$AuthResponseDataBuilder.class
+│   │       │                       │   │   ├── AuthResponseData.class
+│   │       │                       │   │   ├── ErrorResponseData.class
+│   │       │                       │   │   ├── ModifyRequestData$ModifyRequestDataBuilder.class
+│   │       │                       │   │   ├── ModifyRequestData.class
+│   │       │                       │   │   ├── RegisterRequestData$RegisterRequestDataBuilder.class
+│   │       │                       │   │   ├── RegisterRequestData.class
+│   │       │                       │   │   ├── SilentRefreshResponseData$SilentRefreshResponseDataBuilder.class
+│   │       │                       │   │   └── SilentRefreshResponseData.class
+│   │       │                       │   ├── entity
+│   │       │                       │   │   ├── Role.class
+│   │       │                       │   │   ├── RoleType.class
+│   │       │                       │   │   ├── User$UserBuilder.class
+│   │       │                       │   │   └── User.class
+│   │       │                       │   └── repository
+│   │       │                       │       ├── RoleRepository.class
+│   │       │                       │       └── UserRepository.class
+│   │       │                       ├── errors
+│   │       │                       │   ├── EmptyCookieException.class
+│   │       │                       │   ├── InvalidTokenException.class
+│   │       │                       │   ├── TokenExpiredException.class
+│   │       │                       │   └── UserNotFoundException.class
+│   │       │                       ├── filter
+│   │       │                       │   ├── AuthenticationErrorFilter.class
+│   │       │                       │   └── AuthenticationFilter.class
+│   │       │                       ├── security
+│   │       │                       │   └── CustomUserAuthentication.class
+│   │       │                       ├── service
+│   │       │                       │   ├── AuthenticationService.class
+│   │       │                       │   └── UserService.class
+│   │       │                       └── utils
+│   │       │                           ├── CookieUtil.class
+│   │       │                           ├── JwtUtil.class
+│   │       │                           └── TokenType.class
+│   │       └── test
+│   │           └── kr
+│   │               └── ac
+│   │                   └── pcu
+│   │                       └── cyber
+│   │                           └── userservice
+│   │                               ├── UserServiceApplicationTests.class
+│   │                               ├── controller
+│   │                               │   ├── AuthenticationControllerTest.class
+│   │                               │   └── UserControllerTest.class
+│   │                               ├── domain
+│   │                               │   ├── entity
+│   │                               │   │   ├── RoleTest.class
+│   │                               │   │   └── UserTest.class
+│   │                               │   └── repository
+│   │                               │       ├── RoleRepositoryTest.class
+│   │                               │       └── UserRepositoryTest.class
+│   │                               ├── service
+│   │                               │   ├── AuthenticationServiceTest.class
+│   │                               │   └── UserServiceTest.class
+│   │                               └── utils
+│   │                                   ├── CookieUtilTest.class
+│   │                                   └── JwtUtilTest.class
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       ├── main
+│   │       │       └── test
+│   │       └── headers
+│   │           └── java
+│   │               ├── main
+│   │               └── test
+│   ├── libs
+│   │   ├── user-service-0.0.1-plain.jar
+│   │   └── user-service-0.0.1.jar
+│   ├── reports
+│   │   └── tests
+│   │       └── test
+│   │           ├── classes
+│   │           │   └── kr.ac.pcu.cyber.userservice.controller.UserControllerTest.html
+│   │           ├── css
+│   │           │   ├── base-style.css
+│   │           │   └── style.css
+│   │           ├── index.html
+│   │           ├── js
+│   │           │   └── report.js
+│   │           └── packages
+│   │               └── kr.ac.pcu.cyber.userservice.controller.html
+│   ├── resources
+│   │   └── main
+│   │       ├── application.yml
+│   │       ├── static
+│   │       └── templates
+│   ├── test-results
+│   │   └── test
+│   │       ├── TEST-kr.ac.pcu.cyber.userservice.controller.UserControllerTest.xml
+│   │       └── binary
+│   │           ├── output.bin
+│   │           ├── output.bin.idx
+│   │           └── results.bin
+│   └── tmp
+│       ├── bootJar
+│       │   └── MANIFEST.MF
+│       ├── compileJava
+│       │   └── source-classes-mapping.txt
+│       ├── compileTestJava
+│       │   └── source-classes-mapping.txt
+│       ├── jar
+│       │   └── MANIFEST.MF
+│       └── test
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── kr
+    │   │       └── ac
+    │   │           └── pcu
+    │   │               └── cyber
+    │   │                   └── userservice
+    │   │                       ├── UserServiceApplication.java
+    │   │                       ├── config
+    │   │                       │   ├── ApplicationConfig.java
+    │   │                       │   └── SecurityConfig.java
+    │   │                       ├── controller
+    │   │                       │   ├── AuthenticationController.java
+    │   │                       │   ├── ExceptionControllerAdvice.java
+    │   │                       │   └── UserController.java
+    │   │                       ├── domain
+    │   │                       │   ├── dto
+    │   │                       │   │   ├── AuthResponseData.java
+    │   │                       │   │   ├── ErrorResponseData.java
+    │   │                       │   │   ├── ModifyRequestData.java
+    │   │                       │   │   ├── RegisterRequestData.java
+    │   │                       │   │   └── SilentRefreshResponseData.java
+    │   │                       │   ├── entity
+    │   │                       │   │   ├── Role.java
+    │   │                       │   │   ├── RoleType.java
+    │   │                       │   │   └── User.java
+    │   │                       │   └── repository
+    │   │                       │       ├── RoleRepository.java
+    │   │                       │       └── UserRepository.java
+    │   │                       ├── errors
+    │   │                       │   ├── EmptyCookieException.java
+    │   │                       │   ├── InvalidTokenException.java
+    │   │                       │   ├── TokenExpiredException.java
+    │   │                       │   └── UserNotFoundException.java
+    │   │                       ├── filter
+    │   │                       │   ├── AuthenticationErrorFilter.java
+    │   │                       │   └── AuthenticationFilter.java
+    │   │                       ├── security
+    │   │                       │   └── CustomUserAuthentication.java
+    │   │                       ├── service
+    │   │                       │   ├── AuthenticationService.java
+    │   │                       │   └── UserService.java
+    │   │                       └── utils
+    │   │                           ├── CookieUtil.java
+    │   │                           ├── JwtUtil.java
+    │   │                           └── TokenType.java
+    │   └── resources
+    │       ├── application.yml
+    │       ├── static
+    │       └── templates
+    └── test
+        └── java
+            └── kr
+                └── ac
+                    └── pcu
+                        └── cyber
+                            └── userservice
+                                ├── UserServiceApplicationTests.java
+                                ├── controller
+                                │   ├── AuthenticationControllerTest.java
+                                │   └── UserControllerTest.java
+                                ├── domain
+                                │   ├── entity
+                                │   │   ├── RoleTest.java
+                                │   │   └── UserTest.java
+                                │   └── repository
+                                │       ├── RoleRepositoryTest.java
+                                │       └── UserRepositoryTest.java
+                                ├── service
+                                │   ├── AuthenticationServiceTest.java
+                                │   └── UserServiceTest.java
+                                └── utils
+                                    ├── CookieUtilTest.java
+                                    └── JwtUtilTest.java
+```
