@@ -122,8 +122,8 @@ public class AuthenticationService {
     public HttpHeaders clearAllCookies() {
         HttpHeaders headers = new HttpHeaders();
 
-        headers.add("set-cookie", "access_token=null; max-age=0");
-        headers.add("set-cookie", "refresh_token=null; max-age=0");
+        headers.add("set-cookie", "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly;");
+        headers.add("set-cookie", "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly;");
 
         return headers;
     }
