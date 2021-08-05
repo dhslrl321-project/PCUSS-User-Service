@@ -9,9 +9,9 @@ import java.util.Locale;
 @Component
 public class CookieUtil {
 
-    private final int ONE_DAY = 1000 * 60 * 60 * 24;
-    private final int TWO_WEEK = 1000 * 60 * 60 * 24 * 14;
-
+    private final int ONE_DAY = 24 * 60 * 60;
+    private final int TWO_WEEK = ONE_DAY * 14;
+  
     /**
      * 쿠키 배열로부터 토큰을 파싱한다.
      *
@@ -66,7 +66,7 @@ public class CookieUtil {
     }
 
     /**
-     * 쿠키에 존재하는 토큰을 만료시킨다.
+     * 쿠키에 존재하는 토큰을 만료시킨다.  
      *
      * @param cookies : request 의 쿠키 배열
      * @param tokenType : 만료시킬 토큰의 타입

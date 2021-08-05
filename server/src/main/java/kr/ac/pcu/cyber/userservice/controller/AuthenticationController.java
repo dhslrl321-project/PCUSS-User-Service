@@ -41,6 +41,7 @@ public class AuthenticationController {
 
     @GetMapping("/logout")
     public ResponseEntity<?> logout() {
-        return ResponseEntity.status(HttpStatus.OK).headers(authenticationService.clearAllCookies()).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(authenticationService.clearAllCookies()).build();
     }
+
 }

@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -61,7 +60,7 @@ public class AuthenticationService {
 
         AuthResponseData responseData = modelMapper.map(user, AuthResponseData.class);
         tokenDispenser(jwtUtil, responseData);
-
+        // 제발 잘하자
         return responseData;
     }
 
@@ -122,8 +121,10 @@ public class AuthenticationService {
     public HttpHeaders clearAllCookies() {
         HttpHeaders headers = new HttpHeaders();
 
-        headers.add("set-cookie", "access_token=null; max-age=0");
-        headers.add("set-cookie", "refresh_token=null; max-age=0");
+        headers.add("set-cookie",
+                "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly; path=/;");
+        headers.add("set-cookie",
+                "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly; path=/;");
 
         return headers;
     }
@@ -135,7 +136,7 @@ public class AuthenticationService {
      * @return userId : accessToken 이 담긴 cookie 에서 토큰을 파싱하고 userId 를 반환한다.
      */
     public String parseUserIdFromCookies(Cookie[] cookies) {
-        String accessToken = cookieUtil.parseTokenFromCookies(cookies, TokenType.REFRESH_TOKEN);
+        String accessToken = cookieUtil.parseTokenFromCookies(cookies, TokenType.ACCESS_TOKEN);
         Claims claims = jwtUtil.parseToken(accessToken);
         return claims.get("userId", String.class);
     }
