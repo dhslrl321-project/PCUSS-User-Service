@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -122,8 +121,10 @@ public class AuthenticationService {
     public HttpHeaders clearAllCookies() {
         HttpHeaders headers = new HttpHeaders();
 
-        headers.add("set-cookie", "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly;");
-        headers.add("set-cookie", "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly;");
+        headers.add("set-cookie",
+                "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly; path=/;");
+        headers.add("set-cookie",
+                "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; httpOnly; path=/;");
 
         return headers;
     }

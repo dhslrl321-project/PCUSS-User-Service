@@ -10,7 +10,7 @@ import java.util.Locale;
 public class CookieUtil {
 
     private final int ONE_DAY = 24 * 60 * 60;
-    private final int TWO_WEEK = 30 * 24 * 60 * 60;
+    private final int TWO_WEEK = ONE_DAY * 14;
 
     /**
      * 쿠키 배열로부터 토큰을 파싱한다.
